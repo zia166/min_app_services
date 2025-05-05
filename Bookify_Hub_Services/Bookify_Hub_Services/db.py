@@ -1,14 +1,20 @@
 from django.conf import settings
 from pymongo import MongoClient
 import certifi
+import ssl
 
 client = MongoClient(
     settings.ATLAS_CONNECTION_STRING,
+    tls=True,
     tlsCAFile=certifi.where(),
-    tlsAllowInvalidCertificates=False,
-    tlsAllowInvalidHostnames=False,
+    tlsAllowInvalidCertificates=True,
+    tlsAllowInvalidHostnames=True,
     retryWrites=True,
-    w='majority'
+    w='majority',
+    connectTimeoutMS=30000,
+    socketTimeoutMS=30000,
+    serverSelectionTimeoutMS=30000,
+    ssl_cert_reqs=ssl.CERT_NONE
 )
 
 # Connect to MongoDB

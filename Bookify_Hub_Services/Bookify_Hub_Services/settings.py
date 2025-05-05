@@ -131,15 +131,7 @@ USE_I18N = True
 USE_TZ = True
 # AWS Configuration
 AWS_CREDENTIALS = get_aws_credentials()
-
-# environ['ATLAS_SRV']=config('ATLAS_SRV')
-# environ['MONGO_DB'] ='bookifydB'
-# environ['ENV'] = 'local'
-# environ["AWS_ACCESS_KEY_ID"] = config('AWS_ACCESS_KEY')
-# environ["AWS_SECRET_KEY"] = config('AWS_SECRET_KEY')
-# environ['AWS_S3_BUCKET_NAME'] = 'bookifyadmin'
-# environ['AWS_S3_BUCKET_BASE_URL'] = 'http://bookifyadmin.s3-website-us-east-1.amazonaws.com'
-environ['API_V1_ENDPOINT'] = 'http://127.0.0.1:8000/'
+environ['API_V1_ENDPOINT'] = 'http://44.201.167.152:8000/'
 
 AWS_ACCESS_KEY = os.getenv('AWS_ACCESS_KEY_ID')
 AWS_SECRET_KEY = os.getenv('AWS_SECRET_ACCESS_KEY')

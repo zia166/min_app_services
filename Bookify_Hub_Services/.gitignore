@@ -1,0 +1,6 @@
+**/*.pyc
+.DS_Store
+.env
+.env
+*.env
+config/secrets.json

@@ -11,7 +11,7 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
-
+        
       - name: Check Secret Availability
         run: |
           if [ -z "${{ secrets.EC2_HOST }}" ]; then
@@ -47,9 +47,6 @@ jobs:
       - name: Deploy to EC2
         run: |
           ssh -o StrictHostKeyChecking=no ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'EOF'
-            # Export secret as an environment variable
-            export MY_SECRET_KEY="${{ secrets.MY_SECRET_KEY }}"
-            
             # Navigate to the project folder and pull the latest changes
             cd ~/min_app_services/Bookify_Hub_Services
             git pull origin feature/initial-setup

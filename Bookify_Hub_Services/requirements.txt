@@ -6,4 +6,11 @@ sqlparse==0.4.4
 gunicorn 
 python-dotenv
 django-environ
+django-cors-headers
+pymongo
+certifi
+boto3
+python-decouple
+
+
 

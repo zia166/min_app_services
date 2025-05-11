@@ -1,33 +1,32 @@
-# Use an official Python runtime as a parent image
+# Use official Python runtime as a parent image
 FROM python:3.11.1
 
 # Set environment variables
-# ENV PYTHONDONTWRITEBYTECODE 1
-# ENV PYTHONUNBUFFERED 1
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1
 
-# Set the working directory to /app
+# Set working directory
 WORKDIR /var/www/webapp
 
-# Copy the current directory contents into the container at /app
+# Install system dependencies (if needed for packages like pymongo, boto3, etc.)
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential \
+    libssl-dev \
+    libffi-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copy only requirements first to leverage Docker cache
+COPY requirements.txt .
+
+# Install dependencies in one layer for better caching
+RUN pip install --upgrade pip && \
+    pip install --no-cache-dir -r requirements.txt
+
+# Then copy the rest of the application
 COPY . .
-RUN pip install -U pip
-# Install any needed packages specified in requirements.txt
-RUN pip install --no-cache-dir -r requirements.txt
 
-# Install the corsheaders module
-RUN pip install django-cors-headers
-# Install the pymongo module
-RUN pip install pymongo
-# Install the certifi module
-RUN pip install certifi
-# Install necessary dependencies
-RUN pip install boto3
-
-# Install additional dependencies, including decouple
-RUN pip install python-decouple
-
-# Expose port 8080
+# Expose Django's default port
 EXPOSE 8000
 
-# Run Django application
+# Default command
 CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]

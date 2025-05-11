@@ -1,8 +1,9 @@
 name: 🚀 Deploy to EC2
+
 on:
   push:
     branches:
-        - feature/initial-setup 
+      - feature/initial-setup
 
 jobs:
   deploy:
@@ -17,12 +18,17 @@ jobs:
           mkdir -p ~/.ssh
           echo "${{ secrets.EC2_SSH_KEY }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
-          ssh-keyscan -H ${{ secrets.EC2_HOST }} >> ~/.ssh/known_hosts
+          eval "$(ssh-agent -s)"
+          ssh-add ~/.ssh/id_rsa
+
+      - name: Add EC2 host to known_hosts
+        run: |
+          ssh-keyscan -H "${{ secrets.EC2_HOST }}" >> ~/.ssh/known_hosts
 
       - name: Deploy to EC2
         run: |
           ssh -o StrictHostKeyChecking=no ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'EOF'
             cd ~/min_app_services/Bookify_Hub_Services
             git pull origin feature/initial-setup
-            ~/deploy.sh
+            bash ~/deploy.sh
           EOF
